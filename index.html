@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Toolkit CliniClick</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0E2A66">
+<meta name="robots" content="noindex,nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Toolkit">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+  :root { --blu: #1747A6; --blu-s: #0E2A66; --ciano: #2BB3C4; --testo: #1F2328; --grigio: #6b727a; --bordo: #cfd6dd; --err: #C2322B; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; font: 16px/1.5 Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--testo); display: grid; place-items: center; padding: 20px; overflow: hidden; position: relative;
+    background: radial-gradient(1200px 700px at 15% -10%, #2d63d6 0%, transparent 60%), radial-gradient(900px 600px at 100% 110%, #1fa7b8 0%, transparent 55%), linear-gradient(160deg, #0E2A66 0%, #123a8c 55%, #0b1f4d 100%); }
+  .orb { position: fixed; border-radius: 50%; filter: blur(60px); opacity: .45; pointer-events: none; animation: galleggia 16s ease-in-out infinite alternate; }
+  .o1 { width: 360px; height: 360px; background: #4f86f0; top: -90px; left: -80px; }
+  .o2 { width: 300px; height: 300px; background: #2BB3C4; bottom: -80px; right: -60px; animation-delay: -6s; }
+  .o3 { width: 200px; height: 200px; background: #7aa5ff; top: 55%; left: 62%; opacity: .25; animation-delay: -11s; }
+  @keyframes galleggia { to { transform: translate(40px, 30px) scale(1.12); } }
+  .c { position: relative; z-index: 1; width: min(400px, 100%); padding: 30px 26px 24px; border-radius: 24px; background: rgba(255,255,255,.93); border: 1px solid rgba(255,255,255,.7); box-shadow: 0 30px 80px rgba(5,15,45,.45), 0 2px 0 rgba(255,255,255,.6) inset; backdrop-filter: blur(14px); animation: entra .7s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes entra { from { opacity: 0; transform: translateY(22px) scale(.97); } }
+  .c.esci { animation: via .5s ease forwards; } @keyframes via { to { opacity: 0; transform: translateY(-14px) scale(1.03); } }
+  .c.scuoti { animation: scuoti .45s; } @keyframes scuoti { 20%, 60% { transform: translateX(-9px); } 40%, 80% { transform: translateX(9px); } }
+  .l { width: 64px; height: 64px; border-radius: 18px; margin: 0 auto 14px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 26px; letter-spacing: -.02em;
+    background: linear-gradient(135deg, #1d5be0, #1747A6 55%, #0e2a66); box-shadow: 0 10px 26px rgba(23,71,166,.45), inset 0 1px 0 rgba(255,255,255,.35); }
+  h1 { font-size: 26px; line-height: 1.1; margin: 0; text-align: center; font-weight: 800; letter-spacing: -.02em; }
+  .s { margin: 6px 0 20px; text-align: center; color: var(--grigio); font-size: 14.5px; }
+  .f { position: relative; margin-bottom: 14px; }
+  .f label { display: block; font-size: 12.5px; font-weight: 700; color: #4a5159; margin: 0 0 5px 2px; letter-spacing: .02em; }
+  .f svg.i { position: absolute; left: 13px; bottom: 13px; width: 19px; height: 19px; color: #8b939b; pointer-events: none; transition: color .2s; }
+  .f input { width: 100%; padding: 13px 44px 13px 42px; font: inherit; color: var(--testo); background: #fff; border: 1.5px solid var(--bordo); border-radius: 13px; outline: none; transition: border-color .2s, box-shadow .2s; }
+  .f input:focus { border-color: var(--blu); box-shadow: 0 0 0 4px rgba(23,71,166,.15); }
+  .f input:focus ~ svg.i { color: var(--blu); }
+  .occhio { position: absolute; right: 6px; bottom: 5px; width: 38px; height: 38px; border: 0; background: transparent; color: #8b939b; cursor: pointer; border-radius: 10px; display: grid; place-items: center; }
+  .occhio:hover { color: var(--blu); background: #eef2fa; } .occhio svg { width: 20px; height: 20px; }
+  #cap { display: none; font-size: 12.5px; color: #9a6a00; margin: -6px 0 10px 2px; } #cap.on { display: block; }
+  .r { display: flex; align-items: center; gap: 11px; margin: 4px 0 4px; cursor: pointer; user-select: none; font-size: 14px; color: #3d444b; }
+  .r input { position: absolute; opacity: 0; pointer-events: none; }
+  .tg { width: 42px; height: 24px; border-radius: 999px; background: #c5ccd3; position: relative; transition: background .2s; flex: none; }
+  .tg::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .2s; }
+  .r input:checked + .tg { background: var(--blu); } .r input:checked + .tg::after { transform: translateX(18px); }
+  .r input:focus-visible + .tg { box-shadow: 0 0 0 4px rgba(23,71,166,.25); }
+  #b { width: 100%; margin-top: 18px; padding: 14px; font: inherit; font-weight: 800; font-size: 16px; letter-spacing: .01em; color: #fff; border: 0; border-radius: 14px; cursor: pointer; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #1d5be0, #1747A6 60%, #123a8c); box-shadow: 0 10px 24px rgba(23,71,166,.4); transition: transform .15s, box-shadow .2s, filter .2s; }
+  #b:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 14px 28px rgba(23,71,166,.5); } #b:active:not(:disabled) { transform: translateY(1px); }
+  #b:disabled { cursor: default; filter: saturate(.7); }
+  #b .sp { display: none; width: 18px; height: 18px; margin: -3px 8px -3px 0; border: 2.5px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; vertical-align: middle; animation: gira .7s linear infinite; }
+  #b.att .sp { display: inline-block; } @keyframes gira { to { transform: rotate(360deg); } }
+  #e { min-height: 22px; margin-top: 12px; text-align: center; font-size: 14px; color: var(--err); font-weight: 600; }
+  #e.info { color: var(--grigio); font-weight: 500; }
+  .lk { display: block; width: 100%; margin: 14px 0 0; padding: 6px; background: none; border: 0; color: var(--blu); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; }
+  .lk:hover { text-decoration: underline; }
+  #rq { display: none; } #rq.on { display: block; } #rq h2 { font-size: 18px; margin: 0 0 4px; text-align: center; }
+  #rq textarea { width: 100%; min-height: 96px; padding: 10px 12px; font: 12.5px/1.4 ui-monospace, Consolas, monospace; border: 1.5px solid var(--bordo); border-radius: 12px; resize: vertical; word-break: break-all; background: #fff; color: var(--testo); }
+  #rqRes { display: none; } #rqRes.on { display: block; }
+  #rqRes .ok { color: #1D7A48; font-weight: 700; font-size: 14px; margin: 10px 0 6px; }
+  #rqRes p { color: var(--grigio); font-size: 13.5px; margin: 8px 0 0; }
+  .sec { background: #eef2fa !important; color: var(--blu) !important; box-shadow: none !important; margin-top: 10px !important; }
+  .pie { margin-top: 10px; padding-top: 14px; border-top: 1px solid #e6eaee; text-align: center; font-size: 12.5px; color: #8b939b; display: flex; gap: 6px; align-items: center; justify-content: center; }
+  .pie svg { width: 14px; height: 14px; }
+  @media (prefers-color-scheme: dark) {
+    .c { background: rgba(24,30,40,.9); border-color: rgba(255,255,255,.08); color: #E8EAED; } h1 { color: #fff; } .s, .pie { color: #9aa3ad; } .pie { border-color: #2a323c; }
+    .f label { color: #b4bcc5; } .f input { background: #11161d; color: #E8EAED; border-color: #36404b; } .occhio:hover { background: #1c2430; } .r { color: #c3cad2; } .tg { background: #46515d; }
+  }
+  @media (prefers-reduced-motion: reduce) { .orb, .c, #b .sp { animation: none; } }
+</style></head><body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<form class="c" id="f" autocomplete="on">
+  <div class="l">TK</div>
+  <h1>Toolkit</h1>
+  <p class="s">Accedi per aprire il tuo spazio di lavoro</p>
+  <div class="f"><label for="u">Utenza</label>
+    <input type="text" id="u" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="la tua utenza">
+    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+  <div class="f"><label for="p">Password</label>
+    <input type="password" id="p" name="password" autocomplete="current-password" placeholder="la tua password">
+    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    <button type="button" class="occhio" id="oc" aria-label="Mostra la password" title="Mostra la password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+  <div id="cap">⚠ Il blocco maiuscole è attivo</div>
+  <label class="r"><input type="checkbox" id="r" checked><span class="tg"></span>Resta collegato su questo dispositivo</label>
+  <button id="b" type="submit"><span class="sp"></span><span id="bt">Entra</span></button>
+  <div id="e" role="alert" aria-live="polite"></div>
+  <button type="button" class="lk" id="vaRq">Non hai un accesso? Richiedilo</button>
+  <div class="pie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Accesso protetto · il contenuto è cifrato</div>
+</form>
+<form class="c" id="rq" autocomplete="off" style="margin-top:0">
+  <div class="l">TK</div>
+  <h2>Richiedi l'accesso</h2>
+  <p class="s">Scegli utenza e password. Poi mandi il codice che compare a chi gestisce il tool: quando ti approva, entri con le stesse credenziali.</p>
+  <div id="rqForm">
+    <div class="f"><label for="rn">Nome e cognome</label><input type="text" id="rn" placeholder="come vuoi essere riconosciuto" autocomplete="off"></div>
+    <div class="f"><label for="ru">Utenza che vuoi usare</label><input type="text" id="ru" placeholder="es. mario.rossi" autocomplete="off" autocapitalize="none" spellcheck="false"></div>
+    <div class="f"><label for="rp">Password (almeno 12 caratteri)</label><input type="password" id="rp" autocomplete="new-password" placeholder="meglio una frase lunga"></div>
+    <div class="f"><label for="rp2">Ripeti la password</label><input type="password" id="rp2" autocomplete="new-password"></div>
+    <button id="rb" type="submit"><span class="sp"></span><span>Genera il codice di richiesta</span></button>
+  </div>
+  <div id="rqRes"><div class="ok">✓ Codice pronto</div><textarea id="rqCod" readonly></textarea>
+    <button type="button" id="rqCopia">Copia il codice</button>
+    <p>Mandalo a chi gestisce il tool (messaggio o email). La tua password non è dentro il codice e non la vede nessuno. Dopo l'approvazione torna qui ed entra.</p></div>
+  <div id="rqE" style="min-height:20px;margin-top:10px;text-align:center;font-size:14px;color:var(--err);font-weight:600"></div>
+  <button type="button" class="lk" id="vaLogin">← Torna all'accesso</button>
+</form>
+<script>
+(function () {
+  const enc = new TextEncoder(), unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0)), b64 = u => { let s = ''; u.forEach(x => s += String.fromCharCode(x)); return btoa(s); };
+  const LS = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { } }, del: k => { try { localStorage.removeItem(k); } catch (e) { } } };
+  const $ = id => document.getElementById(id), card = $('f'), msg = $('e'), btn = $('b'), bt = $('bt');
+  const pausa = ms => new Promise(r => setTimeout(r, ms));
+  function occupato(si, testo) { btn.disabled = si; btn.classList.toggle('att', si); bt.textContent = testo || 'Entra'; }
+  function info(t) { msg.className = 'info'; msg.textContent = t; }
+  function errore(t) { msg.className = ''; msg.textContent = t; card.classList.remove('scuoti'); void card.offsetWidth; card.classList.add('scuoti'); }
+  const hex = u => [...u].map(x => x.toString(16).padStart(2, '0')).join('');
+  const norm = u => u.trim().toLowerCase();
+  async function idUtente(u) { return hex(new Uint8Array(await crypto.subtle.digest('SHA-256', enc.encode(norm(u))))).slice(0, 16); }
+  // I dati di ogni persona restano separati: quando entra un'altra persona, i dati dell'utente precedente vengono messi da parte e non si vedono più
+  function cambioProprietario(id) {
+    const prima = LS.get('tk-owner');
+    if (prima && prima !== id) {
+      const mio = {}, chiavi = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.indexOf('asp-') === 0) chiavi.push(k); } } catch (e) { }
+      chiavi.forEach(k => { mio[k] = LS.get(k); LS.del(k); });
+      LS.set('tk-st:' + prima, JSON.stringify(mio));
+      try { const st = JSON.parse(LS.get('tk-st:' + id) || 'null'); if (st) Object.keys(st).forEach(k => LS.set(k, st[k])); } catch (e) { }
+      LS.del('tk-st:' + id);
+    }
+    LS.set('tk-owner', id);
+  }
+  async function apri(sess) {
+    const K = unb64(sess.K);
+    const r = await fetch('app.enc', { cache: 'no-store' }); if (!r.ok) throw new Error('Non riesco a scaricare il tool: controlla la connessione.');
+    const by = new Uint8Array(await r.arrayBuffer()), iv = by.slice(0, 16), ct = by.slice(16, by.length - 32), mac = by.slice(by.length - 32);
+    const mk = await crypto.subtle.importKey('raw', K.slice(32), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+    if (!(await crypto.subtle.verify('HMAC', mk, mac, by.slice(0, by.length - 32)))) throw new Error('Il file del tool non è integro.');
+    const ak = await crypto.subtle.importKey('raw', K.slice(0, 32), 'AES-CBC', false, ['decrypt']);
+    const html = new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, ak, ct));
+    window.tkEsci = () => { LS.del('tk-k'); location.reload(); }; window.tkSess = sess; cambioProprietario(sess.id);
+    card.classList.remove('scuoti'); card.classList.add('esci'); await pausa(380);
+    document.open(); document.write(html); document.close();
+  }
+  async function sblocca(u, p) {
+    let dir; try { const ra = await fetch('accessi.json', { cache: 'no-store' }); if (!ra.ok) throw 0; dir = await ra.json(); } catch (e) { throw new Error('Non riesco a verificare l\'accesso: controlla la connessione.'); }
+    const id = await idUtente(u), a = (dir.utenti || []).find(x => x.id === id), sbagliato = new Error('Utenza o password non corrette.');
+    if (!a) { await crypto.subtle.importKey('raw', enc.encode('x'), 'PBKDF2', false, ['deriveKey']); throw sbagliato; }
+    const base = await crypto.subtle.importKey('raw', enc.encode(norm(u) + '\n' + p), 'PBKDF2', false, ['deriveKey']);
+    const kw = await crypto.subtle.deriveKey({ name: 'PBKDF2', salt: unb64(a.salt), iterations: a.iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    try {
+      const pl = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(a.iv) }, kw, unb64(a.wk))));
+      return { id: a.id, nome: a.nome, ruolo: a.ruolo, K: pl.K };
+    } catch (e) { throw sbagliato; }
+  }
+  // richiesta di accesso: il codice contiene solo la chiave derivata dalla password, mai la password
+  async function creaRichiesta(nome, utente, password) {
+    const salt = crypto.getRandomValues(new Uint8Array(16)), salt2 = crypto.getRandomValues(new Uint8Array(16)), iter = 600000;
+    const base = await crypto.subtle.importKey('raw', enc.encode(norm(utente) + '\n' + password), 'PBKDF2', false, ['deriveBits']);
+    const w = new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations: iter, hash: 'SHA-256' }, base, 256));
+    return btoa(JSON.stringify({ v: 1, id: await idUtente(utente), nome, iter, salt: b64(salt), salt2: b64(salt2), w: b64(w) }));
+  }
+  $('vaRq').addEventListener('click', () => { card.style.display = 'none'; $('rq').classList.add('on'); $('rn').focus(); });
+  $('vaLogin').addEventListener('click', () => { $('rq').classList.remove('on'); card.style.display = ''; });
+  $('rq').addEventListener('submit', async ev => {
+    ev.preventDefault(); const er = $('rqE'); er.textContent = '';
+    const n = $('rn').value.trim(), u = $('ru').value.trim(), p = $('rp').value;
+    if (n.length < 2) return er.textContent = 'Scrivi nome e cognome.';
+    if (u.length < 3) return er.textContent = 'L\'utenza deve avere almeno 3 caratteri.';
+    if (p.length < 12) return er.textContent = 'La password deve avere almeno 12 caratteri.';
+    if (p !== $('rp2').value) return er.textContent = 'Le due password non sono uguali.';
+    const rb = $('rb'); rb.disabled = true; rb.classList.add('att');
+    try { $('rqCod').value = await creaRichiesta(n, u, p); $('rqForm').style.display = 'none'; $('rqRes').classList.add('on'); $('rp').value = $('rp2').value = ''; }
+    catch (x) { er.textContent = 'Non sono riuscito a creare il codice.'; } finally { rb.disabled = false; rb.classList.remove('att'); }
+  });
+  $('rqCopia').addEventListener('click', async () => { const t = $('rqCod'); t.select(); try { await navigator.clipboard.writeText(t.value); $('rqCopia').textContent = 'Copiato ✓'; } catch (e) { document.execCommand('copy'); $('rqCopia').textContent = 'Copiato ✓'; } });
+  $('oc').addEventListener('click', () => { const p = $('p'), v = p.type === 'password'; p.type = v ? 'text' : 'password'; $('oc').title = $('oc').ariaLabel = v ? 'Nascondi la password' : 'Mostra la password'; p.focus(); });
+  $('p').addEventListener('keyup', ev => { $('cap').classList.toggle('on', !!(ev.getModifierState && ev.getModifierState('CapsLock'))); });
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => { });
+  if (!(window.crypto && crypto.subtle)) { errore('Questo browser non supporta l\'accesso protetto: apri la pagina da https.'); occupato(true); }
+  const salvata = (() => { try { const s = JSON.parse(LS.get('tk-k') || 'null'); return s && s.scade > Date.now() && s.K && s.id ? s : null; } catch (x) { return null; } })();
+  if (salvata) { occupato(true, 'Apro il tool…'); info('Bentornato'); apri(salvata).catch(() => { LS.del('tk-k'); occupato(false); msg.textContent = ''; }); }
+  else setTimeout(() => $('u').focus(), 300);
+  card.addEventListener('submit', async ev => {
+    ev.preventDefault(); msg.textContent = ''; occupato(true, 'Controllo…');
+    try {
+      const sess = await sblocca($('u').value, $('p').value);
+      if ($('r').checked) LS.set('tk-k', JSON.stringify(Object.assign({ scade: Date.now() + 30 * 864e5 }, sess))); else LS.del('tk-k');
+      occupato(true, 'Apro il tool…'); await apri(sess);
+    } catch (x) { errore(x.message || 'Accesso non riuscito'); occupato(false); $('p').select(); }
+  });
+})();
+</script></body></html>
